@@ -10,7 +10,7 @@ interface IProps {}
 
 const Header: FC<IProps> = (props) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           Navbar

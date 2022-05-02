@@ -6,15 +6,17 @@ import Footer from "./Footer";
  * @function @Layout
  **/
 
- type LayoutProps = {
+type LayoutProps = {
   children: React.ReactNode; // 👈️ type children
 };
 
-const Layout = (props : LayoutProps) => {
+const Layout = (props: LayoutProps) => {
   return (
     <>
       <Header />
-      <main className="container-lg container-fluid">{props.children}</main>
+      <main className="container-lg container-fluid content">
+        {props.children}
+      </main>
       <Footer />
     </>
   );

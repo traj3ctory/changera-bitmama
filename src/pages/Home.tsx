@@ -1,47 +1,41 @@
-// import { FC } from "react";
-
-// interface IProps {}
-
-// /**
-//  * @author traj3ctory
-//  * @function @Home
-//  **/
-
-// const Home: FC<IProps> = (props) => {
-//   return <div>Home</div>;
-// };
-
-// export default Home;
-
-import { useContext, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../App";
+import { useSelector, useDispatch } from "react-redux";
 
+interface IProps {}
 
-export default function Home() {
-  const { state, dispatch } = useContext(AuthContext);
+/**
+ * @author traj3ctory
+ * @function @Home
+ **/
+
+const Home: FC<IProps> = (props) => {
+  const dispatch = useDispatch();
+  const userData = useSelector((state: any) => state.auth);
   const navigate = useNavigate();
-  // if (!state.isLoggedIn) {
+  console.log(userData);
+  // if (!userData.isLoggedIn) {
   //   return <navigate to="/login" />;
   // }
   useEffect(() => {
-    if (!state.isLoggedIn) {
+    if (userData.isLoggedIn === false) {
       return navigate("/login");
     }
-  }, [state.isLoggedIn, navigate]);
+  }, [userData.isLoggedIn, navigate]);
 
-  const { avatar_url, name, public_repos, followers, following } = state.user
+  // const { avatar_url, name, public_repos, followers, following } =
+  //   userData.user;
 
   const handleLogout = () => {
     dispatch({
-      type: "LOGOUT"
+      type: "LOGOUT",
     });
-  }
+  };
 
   return (
     <div className="container">
       <button onClick={() => handleLogout()}>Logout</button>
-      <div>
+      {/* {userData.user && (
         <div className="content">
           <img src={avatar_url} alt="Avatar" />
           <span>{name}</span>
@@ -49,7 +43,9 @@ export default function Home() {
           <span>{followers} Followers</span>
           <span>{following} Following</span>
         </div>
-      </div>
+      )} */}
     </div>
   );
-}
+};
+
+export default Home;
