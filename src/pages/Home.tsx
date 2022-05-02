@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import List from "../components/List";
 import { FiUsers } from "react-icons/fi";
 import { BiMap } from "react-icons/bi";
@@ -25,8 +25,6 @@ const Home: FC<IProps> = (props) => {
   if (userData.isLoggedIn === false) {
     navigate("/login");
   }
-  const { avatar_url, name, login, followers, following, location, blog } =
-    userData.user;
 
   return (
     <>
@@ -34,32 +32,32 @@ const Home: FC<IProps> = (props) => {
         <div className="row">
           <div className="col-md-3 mb-3">
             <img
-              src={avatar_url}
-              alt={name}
+              src={userData?.user.avatar_url}
+              alt={userData?.user.name}
               className="img-fluid rounded-circle mb-3"
               width={300}
               height={300}
             />
-            <h4>{name}</h4>
-            <p>{login}</p>
+            <h4>{userData?.user.name}</h4>
+            <p>{userData?.user.login}</p>
             <button className="btn btn-light shadow-sm mb-3 w-100">
               Edit profile
             </button>
             <p>
               <FiUsers />
-              &nbsp;{followers}&nbsp;followers.&nbsp;{following}&nbsp;following
+              &nbsp;{userData?.user.followers}&nbsp;followers.&nbsp;{userData?.user.following}&nbsp;following
             </p>
             <h6>
               <BiMap />
-              &ensp;{location}
+              &ensp;{userData?.user.location}
             </h6>
             <h6>
               <BsLink45Deg />
-              &ensp;{blog}
+              &ensp;{userData?.user.blog}
             </h6>
           </div>
           <div className="className col-md-9 mb-3">
-            <List repos={userData.repos} />
+            <List repos={userData?.user.userData.repos} />
           </div>
         </div>
       ) : (

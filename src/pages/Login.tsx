@@ -20,22 +20,23 @@ const Login: FC = () => {
 
   const { client_id, redirect_uri, proxy_url } = user;
 
-  const getRepos = async (username: string) => {
-    console.log(username);
-    try {
-      const response = await fetch(`${proxy_url}/repos`, {
-        method: "POST",
-        body: username,
-      });
-      const json = await response.json();
-      dispatch({ type: SET_REPO, payload: json });
-      // navigate(`/repos/${username}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   // ================
   useEffect(() => {
+    const getRepos = async (username: string) => {
+      console.log(username);
+      try {
+        const response = await fetch(`${proxy_url}/repos`, {
+          method: "POST",
+          body: username,
+        });
+        const json = await response.json();
+        dispatch({ type: SET_REPO, payload: json });
+        // navigate(`/repos/${username}`);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // ================
     const handleAuth = async () => {
       setLoading(true);
       //  wait for the updated url to be loaded
@@ -64,7 +65,7 @@ const Login: FC = () => {
       setLoading(false);
     };
     handleAuth();
-  }, [searchParams]);
+  }, [searchParams, dispatch, proxy_url, navigate]);
   // ================
 
   return (
