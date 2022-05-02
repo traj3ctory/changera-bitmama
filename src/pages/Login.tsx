@@ -23,7 +23,6 @@ const Login: FC = () => {
   // ================
   useEffect(() => {
     const getRepos = async (username: string) => {
-      console.log(username);
       try {
         const response = await fetch(`${proxy_url}/repos`, {
           method: "POST",

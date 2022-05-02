@@ -47,7 +47,6 @@ app.post("/auth", async (req, res) => {
     });
 });
 app.post("/auth/repos", async (req, res) => {
-  console.log(req.body, "=>hello");
   fetch(
     `https://api.github.com/users/${req.body}/repos?type=public&per_page=20`,
     {

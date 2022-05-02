@@ -57,7 +57,7 @@ const Home: FC<IProps> = (props) => {
             </h6>
           </div>
           <div className="className col-md-9 mb-3">
-            <List repos={userData?.user.userData.repos} />
+            <List repos={userData.repos} />
           </div>
         </div>
       ) : (
