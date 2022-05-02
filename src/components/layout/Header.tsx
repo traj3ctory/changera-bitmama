@@ -1,5 +1,7 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { LOGOUT } from "../../store/Auth";
 
 interface IProps {}
 
@@ -9,11 +11,17 @@ interface IProps {}
  **/
 
 const Header: FC<IProps> = (props) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(LOGOUT());
+    navigate("/login");
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
-          Navbar
+          React-Github
         </Link>
         <button
           className="navbar-toggler"
@@ -27,21 +35,11 @@ const Header: FC<IProps> = (props) => {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav w-100 d-flex justify-content-end">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Features
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Pricing
-              </Link>
+              <button className="btn btn-danger" onClick={() => handleLogout()}>
+                Logout
+              </button>
             </li>
           </ul>
         </div>

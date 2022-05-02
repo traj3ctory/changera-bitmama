@@ -9,8 +9,9 @@ const getUserData = getUser ? JSON.parse(getUser) : null;
 const auth = createSlice({
   name: "auth",
   initialState: {
-    isLoggedIn: getIsLoggedIn || false as initialStateType["isLoggedIn"],
+    isLoggedIn: getIsLoggedIn || (false as initialStateType["isLoggedIn"]),
     user: getUserData || null,
+    repos: [],
     client_id: process.env.REACT_APP_CLIENT_ID,
     redirect_uri: process.env.REACT_APP_REDIRECT_URI,
     client_secret: process.env.REACT_APP_CLIENT_SECRET,
@@ -29,7 +30,13 @@ const auth = createSlice({
         user: action.payload.user,
       };
     },
-    LOGOUT(state, action) {
+    SET_REPO(state, action) {
+      return {
+        ...state,
+        repos: action.payload,
+      };
+    },
+    LOGOUT(state) {
       localStorage.clear();
       return {
         ...state,
@@ -40,5 +47,5 @@ const auth = createSlice({
   },
 });
 
-export const { LOGIN, LOGOUT } = auth.actions;
+export const { LOGIN, LOGOUT, SET_REPO } = auth.actions;
 export default auth.reducer;

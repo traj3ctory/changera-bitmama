@@ -1,7 +1,8 @@
 import { FC, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// import GithubIcon from "mdi-react/GithubIcon";
+import { BsGithub } from "react-icons/bs";
+import { LOGIN, SET_REPO } from "../store/Auth";
 
 /**
  * @author traj3ctory
@@ -11,73 +12,81 @@ import { useSelector, useDispatch } from "react-redux";
 const Login: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   const user = useSelector((state: any) => state.auth);
   const [data, setData] = useState({ errorMessage: "", isLoading: false });
+  const [loading, setLoading] = useState(false);
+  // const [username, setUsername ] = useState("");
 
   const { client_id, redirect_uri, proxy_url } = user;
 
-  // useEffect(() => {
-  //   // After requesting Github access, Github redirects back to your app with a code parameter
-  //   const url = window.location.href;
-  //   const hasCode = url.includes("?code=");
-
-  //   // If Github API returns the code parameter
-  //   if (hasCode) {
-  //     const newUrl = url.split("?code=");
-  //     window.history.pushState({}, "", newUrl[0]);
-  //     setData({ ...data, isLoading: true });
-
-  //     const requestData = {
-  //       code: newUrl[1],
-  //     };
-
-  //     // Use code parameter and other parameters to make POST request to proxy_server
-  //     fetch(proxy_url, {
-  //       method: "POST",
-  //       body: JSON.stringify(requestData),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         dispatch({
-  //           type: "LOGIN",
-  //           payload: { user: data, isLoggedIn: true },
-  //         });
-  //       })
-  //       .catch((error) => {
-  //         setData({
-  //           isLoading: false,
-  //           errorMessage: "Sorry! Login failed",
-  //         });
-  //       });
-  //   }
-  // }, [user, dispatch, data, proxy_url]);
-
-  // if (user.isLoggedIn) {
-  //   return navigate("/");
-  // }
+  const getRepos = async (username: string) => {
+    console.log(username);
+    try {
+      const response = await fetch(`${proxy_url}/repos`, {
+        method: "POST",
+        body: username,
+      });
+      const json = await response.json();
+      dispatch({ type: SET_REPO, payload: json });
+      // navigate(`/repos/${username}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // ================
+  useEffect(() => {
+    const handleAuth = async () => {
+      setLoading(true);
+      //  wait for the updated url to be loaded
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const code = searchParams.get("code");
+      if (code) {
+        fetch(proxy_url, {
+          method: "POST",
+          body: code,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            dispatch(LOGIN({ user: data, isLoggedIn: true }));
+            // setUsername(data.login);
+            getRepos(data.login);
+            navigate("/");
+          })
+          .catch((error) => {
+            setData({
+              isLoading: false,
+              errorMessage: "Sorry! Login failed",
+            });
+          });
+        // ====== fetch repo
+      }
+      setLoading(false);
+    };
+    handleAuth();
+  }, [searchParams]);
+  // ================
 
   return (
-    <section className="row">
-      <div className="col-md-6 mx-auto">
+    <section className="row h_login">
+      <div
+        className="col-md-6 mx-auto"
+      >
         <span>{data.errorMessage}</span>
-        <div className="card card-body border-0 shadow-sm">
-          {data.isLoading ? (
+        <div className="card card-body border-0 shadow text-center py-4">
+          {loading ? (
             <div className="loader-container">
-              <div className="loader"></div>
+              <div className="loader">Loading</div>
             </div>
           ) : (
-            <div>
               <a
                 className="btn btn-dark"
                 href={`https://github.com/login/oauth/authorize?scope=user&client_id=${client_id}&redirect_uri=${redirect_uri}`}
-                onClick={() => {
-                  setData({ ...data, errorMessage: "" });
-                }}
+                onClick={() => setData({ ...data, errorMessage: "" })}
               >
-                {/* <GithubIcon /> */}
-                <span>Login with GitHub</span>
+                <BsGithub />
+                &nbsp;Login with Github!
               </a>
-            </div>
           )}
         </div>
       </div>

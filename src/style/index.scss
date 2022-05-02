@@ -3,6 +3,21 @@
 main.content {
   min-height: 90vh;
   padding-top: 2rem;
+  background-color: #ffffffc4;
+}
+
+.dot{
+  width: 5px;
+  height: 5px;
+  background-color: #114363;
+  border-radius: 50%;
+}
+.h_login{
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  width: 100%;
 }
 
 footer.footer{
